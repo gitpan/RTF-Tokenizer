@@ -8,7 +8,7 @@
        |___|  |_____||__|__||_____||__|__||__||_____||_____||__| 
 
 +---------------------------------------------------------------------+
-| RTF::Tokenizer - Version 1.4 - Peter Sergeant - <rtft@clueball.com> |
+| RTF::Tokenizer - Version 1.5 - Peter Sergeant - <rtft@clueball.com> |
 +---------------------------------------------------------------------+
 
 +-> Introduction
@@ -43,8 +43,7 @@
 | use strict;                                                         |
 | use RTF::Tokenizer;                                                 |
 |                                                                     |
-| my $tokenizer = RTF::Tokenizer->new();                              |
-| $tokenizer->read_file( $ARGV[0] );                                  |
+| my $tokenizer = RTF::Tokenizer->new( file => $ARGV[0]);             |
 |                                                                     |
 | while (1) {                                                         |
 |                                                                     |
@@ -71,5 +70,5 @@
 +---------------------------------------------------------------------+
 
 +---------------------------------------------------------------------+
-| RTF::Tokenizer - Version 1.4 - Peter Sergeant - <rtft@clueball.com> |
+| RTF::Tokenizer - Version 1.5 - Peter Sergeant - <rtft@clueball.com> |
 +---------------------------------------------------------------------+

@@ -1,5 +1,9 @@
 Revision history for Perl extension RTF::Tokenizer.
 
+1.05    Mon Oct 27 13:00:00 2003
+	* Added the ability to return tokens, to make XML::RTF::SAX a little
+            more sane. See the docs for details.
+
 1.04	Fri Oct 03 18:30:00 2003
 	* Removed all the cruft added in 1.03 (signatures, Module::Build)
 	* Added syntax-highlighting modules

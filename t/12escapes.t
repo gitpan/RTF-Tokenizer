@@ -23,7 +23,7 @@ ok( eq_array( [$tokenizer->get_token()], ['control', 'rtf', 1] ), 'RTF v1' );
 ok( eq_array([$tokenizer->get_token()],['text',"Hi there $xstring See ya!abc",''] ), 'Read text' );
 ok( eq_array( [$tokenizer->get_token()], ['escape', "'", 'aa'] ), 'Hex char' );
 ok( eq_array( [$tokenizer->get_token()], ['group', 0, ''] ), 'Group closes' );
-ok( !$tokenizer->{_TEMP_ESCAPE_FLAG}, "Temp flag is unset (" . $tokenizer->{_TEMP_ESCAPE_FLAG} . ")");
+ok( !$tokenizer->{_TEMP_ESCAPE_FLAG}, "Temp flag is unset"); 
 ok( eq_array( [$tokenizer->get_token()], ['escape', '_', ''] ), 'Escape found' );
 ok( !$tokenizer->{_TEMP_ESCAPE_FLAG}, 'Temp flag is still unset');
 

@@ -33,6 +33,9 @@ Tokenizes RTF
  my ( $token_type, $argument, $parameter ) =
     $tokenizer->get_token();
 
+ # Ooops, that was wrong...
+ $tokenizer->put_token( 'control', 'b', 1 );
+
 =head1 INTRODUCTION
 
 This documentation assumes some basic knowledge of RTF.
@@ -50,7 +53,7 @@ use strict;
 use Carp;
 use IO::File;
 
-$VERSION = '1.04';
+$VERSION = '1.05';
 
 =head1 METHODS
 
@@ -263,6 +266,15 @@ sub get_token {
 		
 	}
 
+	# We might have a cached token...
+	if ( $self->{_PUT_TOKEN_CACHE_FLAG} ) {
+		
+		$self->{_PUT_TOKEN_CACHE_FLAG} = @{ $self->{_PUT_TOKEN_CACHE} } - 1;
+		$self->{_PUT_TOKEN_CACHE_FLAG} = 0 if $self->{_PUT_TOKEN_CACHE_FLAG} < 1;
+		return @{ pop( @{ $self->{_PUT_TOKEN_CACHE} } ) };
+
+	}
+
 	while (1) {
 	
 		#print substr($self->{_BUFFER}, 0, 50) . "\n";
@@ -342,6 +354,25 @@ sub get_token {
 		}
 	
 	}
+
+}
+
+=head2 put_token( type, token, argument )
+
+Adds an item to the token cache, so that the next time you
+call get_token, the arguments you passed here will be returned.
+We don't check any of the values, so use this carefully. This
+is on a first in last out basis.
+
+=cut
+
+sub put_token {
+
+	my $self = shift;
+	my ( $type, $token, $argument ) = (shift, shift, shift);
+
+	push( @{$self->{_PUT_TOKEN_CACHE}}, [ $type, $token, $argument ] ); 
+	$self->{_PUT_TOKEN_CACHE_FLAG} = 1;
 
 }
 
