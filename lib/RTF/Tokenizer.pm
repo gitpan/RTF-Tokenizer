@@ -53,7 +53,7 @@ use strict;
 use Carp;
 use IO::File;
 
-$VERSION = '1.05';
+$VERSION = '1.06';
 
 =head1 METHODS
 
@@ -216,7 +216,7 @@ sub _line_endings {
 =head2 get_token()
 
 Returns the next token as a three-item list: 'type', 'argument', 'parameter'.
-Token is one of: C<text>, C<control>, C<group>, or C<eof>.
+Token is one of: C<text>, C<control>, C<group>, C<escape> or C<eof>.
 
 =over
 

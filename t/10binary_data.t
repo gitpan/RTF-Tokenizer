@@ -7,7 +7,7 @@ use Test::More tests => 9;
 
 SKIP: {
 	eval { require IO::Scalar };
-	skip "IO::Scalar not installed", 11 if $@;
+	skip "IO::Scalar not installed", 9 if $@;
 
 my $xstring = 'x' x 500;
 
