@@ -40,10 +40,6 @@ L<http://search.cpan.org/search?dist=RTF-Writer>
 
 =cut
 
-# TODO:
-#	- Remove the need for IO::Scalar, and Test::More (CHANGES)
-#	- Update MANIFEST
-
 require 5;
 package RTF::Tokenizer;
 use vars qw($VERSION);
@@ -52,7 +48,7 @@ use strict;
 use Carp;
 use IO::File;
 
-$VERSION = '1.01';
+$VERSION = '1.02';
 
 =head1 METHODS
 
@@ -260,11 +256,40 @@ sub get_token {
 		my $start_character = substr( $self->{_BUFFER}, 0, 1, '' );
 		
 		# Most likely to be text, so we check for that first
-		if ( $start_character =~ /[^\\{}\r\n\t]/ ) {
+		if ( $start_character =~ /[^\\{}\r\n]/ ) {
 			
 			local($^W); # Turn off warnings here
-			$self->{_BUFFER} =~ s/^([^\\{}\r\n]+)//;
-			return( 'text', $start_character . $1, '' );
+			
+			# Originally we just split text fields that wrapped
+			#  newlines into two tokens. Now we're going to try
+			#  and be clever, and read the whole thing in...
+			
+			my $temp_text;
+			
+			READTEXT:
+			
+			$self->{_BUFFER} =~ s/^([^\\{}]+)//s;
+			
+			$temp_text .= $1;
+			
+			# If the buffer is empty, try reading in some more, and
+			#  then go back to READTEXT to keep going. Now, the clever
+			#  thing would be to assume that if the buffer *IS* empty
+			#  then there MUST be more to read, which is true if we
+			#  have well-formed input. Assuming well-formed input is t3h
+			#  stupid though.
+			
+			if ( ( !$self->{_BUFFER} ) && ( $self->{_FILEHANDLE} ) ) {
+			
+				$self->_get_line;
+				goto READTEXT if $self->{_BUFFER};
+			
+			}
+			
+			# Make sure we're not including newlines in our output
+			$temp_text =~ s/(\cM\cJ|\cM|\cJ)//g;
+			
+			return( 'text', $start_character . $temp_text, '' );
 		
 		# Second most likely to be a control character
 		} elsif ( $start_character eq "\\" ) {
@@ -323,6 +348,25 @@ sub initial_read {
 
 }
 
+=head2 debug( [number] )
+
+Returns (non-destructively) the next 50 characters from the buffer,
+OR, the number of characters you specify. Printing these to STDERR,
+causing fatal errors, and the like, are left as an exercise to the
+programmer.
+
+=cut
+
+sub debug {
+
+	my $self = shift;
+	my $number = shift || 50;
+	
+	return substr( $self->{_BUFFER}, 0, $number );
+
+}
+
+
 sub _grab_control {
 
 	my $self = shift;
@@ -357,6 +401,17 @@ sub _grab_control {
 	} elsif ( $self->{_BUFFER} =~ s/^[\r\n]// ) {
 	
 		return( 'par', '' );
+
+	# Escaped tab (ew, but allowed)
+	} elsif ( $self->{_BUFFER} =~ s/^\t// ) {
+	
+		return( 'tab', '' );
+
+	# Escaped semi-colon - this is WRONG
+	} elsif ( $self->{_BUFFER} =~ s/^\;// ) {
+	
+		carp("Your RTF contains an escaped semi-colon. This is *seriously* suboptimal.");
+		return( ';', '' );
 	
 	# Unicode characters
 	} elsif ( $self->{_BUFFER} =~ s/^u(\d+)// ) {
@@ -366,9 +421,11 @@ sub _grab_control {
 	}
 	
 	# Something is very messed up. Bail
-	my $die_string =  substr( $self->{_BUFFER}, 0, 100 );
+	my $die_string =  substr( $self->{_BUFFER}, 0, 50 );
 	$die_string =~ s/\r/[R]/g; 
-	croak "Something went very wrong:\n$die_string\n";
+	carp "Your RTF is broken, trying to recover to nearest group from '\\$die_string'\n";
+	$self->{_BUFFER} =~ s/^.+?}/}/;
+	return ( '', '');
 
 }
 

@@ -1,3 +1,3 @@
-
-* Support for \bin
-* A more sane Makefile.PL
+* Use Module::Build
+* Remove Test::More dependency
+* Add some tests for the debug command

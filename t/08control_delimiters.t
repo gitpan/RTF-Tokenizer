@@ -1,5 +1,5 @@
 use strict;
-use Test::More tests => 7;
+use Test::More tests => 8;
 use RTF::Tokenizer;
 
 my $tokenizer = RTF::Tokenizer->new();
@@ -18,12 +18,11 @@ ok( eq_array( [$tokenizer->get_token()], ['text', 'Pete', ''] ), '"Pete" read, w
 ok( eq_array( [$tokenizer->get_token()], ['control', 'u', '45'] ), 'u Control read, which means special u delim rules used' );
 ok( eq_array( [$tokenizer->get_token()], ['text', 'Pete', ''] ), '"Pete" read, which means entity delimiter used' );
 
-$tokenizer->read_string(q?\rtf1a?);
+$tokenizer->read_string(q?\rtf1a}asdf?);
 
-# This should die
+# Try and break stuff a bit
+diag("Expect an error message here:\n");
+$tokenizer->get_token();
 
-local $@ = undef;
-eval '$tokenizer->get_token()';
-my $error_message = $@; $error_message =~ s/\n//g;
-ok( $@, "\\rtf1a caused fatal error: '$error_message'");
-
+ok( eq_array( [$tokenizer->get_token()], ['group', '0', ''] ), 'End of group' );
+ok( eq_array( [$tokenizer->get_token()], ['text', 'asdf', ''] ), 'end text read correctly' );

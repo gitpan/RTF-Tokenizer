@@ -1,5 +1,5 @@
 use strict;
-use Test::More tests => 24;
+use Test::More tests => 21;
 use RTF::Tokenizer;
 
 my $DEBUG = 0; 
@@ -8,8 +8,7 @@ my @tokens = (
 ['control', 'f', '1'],
 ['control', 'cb', '1'],
 ['control', 'cf', '2'],
-['text', 'This is colored text. The background is color', ''],
-['text', '1 and the foreground is color 2.', ''],
+['text', 'This is colored text. The background is color 1 and the foreground is color 2.', ''],
 ['group', '0', ''],
 ['eof', '1', '0'],
 );
@@ -42,4 +41,4 @@ if ($DEBUG) {
 
 __DATA__
 {\f1\cb1\cf2 This is colored text. The background is color
-1 and the foreground is color 2.}
+ 1 and the foreground is color 2.}
