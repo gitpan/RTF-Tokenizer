@@ -1,0 +1,37 @@
+RTF/Tokenizer version 0.01
+==========================
+
+RTF/Tokenizer takes an RTF string, and spits out tokens, for your parsing
+and transformation pleasure.
+
+Essentially, this:
+
+  {\pard
+  \qc
+  \b\f3\fs40 Section 1: The Larch
+  \par}
+
+becomes:
+
+  ['group', 1],
+  ['control', 'qc', ''],
+  ['control', 'b', ''],
+  ['control', 'f', '3'],
+  ['control', 'fs', '40'],
+  ['text', 'Section 1: The Larch'],
+  ['control', 'par', ''],
+  ['group', 0]
+
+There are no dependencies, and the thing is as easy to run as:
+
+  my $object = RTF::Tokenizer->new($rtf_string);
+  ...
+    my ($type, $value, $extra) = $object->get_token;
+  ...
+
+COPYRIGHT AND LICENCE
+
+Copyright 2002 Peter Sergeant - pete@clueball.com.
+
+This program is free software; you can redistribute it and/or modify it under
+the same terms as Perl itself.
