@@ -5,8 +5,9 @@
 require 5;
 package RTF::Tokenizer::FontTable;
 use RTF::Tokenizer;
+use vars qw($VERSION);
 use strict;
-my $VERSION = 0.01;
+my $VERSION = '0.02.1';
 
 
 # A list of the properties we might expect...

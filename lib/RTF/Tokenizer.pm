@@ -1,14 +1,14 @@
-# RTF::Tokenizer 0.01
+# RTF::Tokenizer 0.02.1
 
 # by Peter Sergeant <pete@clueball.com>
 
 # Magic Package Stuff
 
-
 require 5;
 package RTF::Tokenizer;
+use vars qw($VERSION);
 use strict;
-my $VERSION = 0.02;
+our $VERSION = '0.02.1';
 
 # Sample:
 #

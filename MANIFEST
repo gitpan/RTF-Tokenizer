@@ -1,0 +1,9 @@
+MANIFEST
+lib/RTF/Tokenizer.pm
+lib/RTF/Tokenizer/FontTable.pm
+t/t2.t
+t/t1.t
+README
+Makefile.PL
+Changes
+samples/rtf2css.pl

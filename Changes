@@ -1,5 +1,10 @@
 Revision history for Perl extension RTF::Tokenizer.
 
+0.02.1 Mon Oct  7 10:02:00 2002
+	- Corrected a mistake in the README
+	- Fixed versions to be correct
+	- Re-added a MANIFEST file(!)
+
 0.02  Wed Jul  3 12:09:09 2002
 	- Fixed some bugs
 	- Added some more documentation

@@ -1,5 +1,5 @@
-RTF/Tokenizer version 0.02
-==========================
+RTF/Tokenizer version 0.02.1
+============================
 
 RTF/Tokenizer takes an RTF string, and spits out tokens, for your parsing
 and transformation pleasure.
@@ -14,6 +14,7 @@ Essentially, this:
 becomes:
 
   ['group', 1],
+  ['control', 'pard', ''],
   ['control', 'qc', ''],
   ['control', 'b', ''],
   ['control', 'f', '3'],
