@@ -1,5 +1,18 @@
 Revision history for Perl extension RTF::Tokenizer.
 
+1.04	Fri Oct 03 18:30:00 2003
+	* Removed all the cruft added in 1.03 (signatures, Module::Build)
+	* Added syntax-highlighting modules
+	* Reworked eg/ - added rtfdiff, removed rtf2rtf, renamed rtfdump
+	* Support for \uc
+	* Added optional differentiation between control words and escapes
+	- Bunch more tests
+
+1.03    Never released... 
+	* Use Module::Build
+	* Sign the distro...
+	- Recovery will go to either group
+
 1.02   Sun Aug 31 16:10:00 2003
 	* We now try to recover from badly-formed control words, meaning
 	    that embeded file paths no longer cause fatal errors.

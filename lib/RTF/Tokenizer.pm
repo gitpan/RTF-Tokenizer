@@ -18,6 +18,8 @@ Tokenizes RTF
  my $tokenizer = RTF::Tokenizer->new( file   => \*STDIN    );
  my $tokenizer = RTF::Tokenizer->new( file   => 'lala.rtf' );
  
+ my $tokenizer = RTF::Tokenizer->new( string => '{\rtf1}', note_escapes => 1 );
+ 
  # Populate it from a file
  $tokenizer->read_file('filename.txt');
  
@@ -48,7 +50,7 @@ use strict;
 use Carp;
 use IO::File;
 
-$VERSION = '1.02';
+$VERSION = '1.04';
 
 =head1 METHODS
 
@@ -60,6 +62,10 @@ by passing C<new()> a hash (well, a list really) containing either
 a 'file'- or 'string'-indexed couplet, where the value is what
 you would like passed to the respective routine. The example in
 the synopsis makes this much more clear than does this description :-)
+
+As of version 1.04, we can also differentiate between control words
+and escapes. If you pass a C<note_escapes> parameter with a true value
+then escapes will have a token type of C<escape> rather than C<control>.
 
 =cut
 
@@ -85,6 +91,8 @@ sub new {
 	my %config = @_;
 	if ( $config{'file'} ) { $self->read_file( $config{'file'} ) }
 	elsif ( $config{'string'} ) { $self->read_string( $config{'string'} ) }
+	
+	$self->{_NOTE_ESCAPES} = $config{'note_escapes'};
 	
 	# Return our newly blessed
 	return $self;
@@ -233,6 +241,12 @@ is not set.
 End of file reached. 'type' is 'eof'. 'argument' is 1. 'parameter' is
 0.
 
+=item C<escape>
+
+If you specifically turn on this functionality, you'll get an
+C<escape> type, which is identical to C<control>, only, it's
+only returned for escapes.
+
 =back
 
 =cut
@@ -294,7 +308,18 @@ sub get_token {
 		# Second most likely to be a control character
 		} elsif ( $start_character eq "\\" ) {
 			
-			return( 'control', $self->_grab_control() );
+			my @args = $self->_grab_control();
+			
+			if ( $self->{_TEMP_ESCAPE_FLAG} ) {
+			
+				delete $self->{_TEMP_ESCAPE_FLAG};
+				return( 'escape', @args );
+			
+			} else {
+			
+				return( 'control', @args );
+			
+			}
 		
 		# Probably a group then	
 		} elsif ( $start_character eq '{' ) {
@@ -355,6 +380,15 @@ OR, the number of characters you specify. Printing these to STDERR,
 causing fatal errors, and the like, are left as an exercise to the
 programmer.
 
+Note the part about 'from the buffer'. It really means that, which means
+if there's nothing in the buffer, but still stuff we're reading from a
+file it won't be shown. Chances are, if you're using this function, you're
+debugging. There's an internal method called C<_get_line>, which is called
+without arguments (C<$self->_get_line()>) that's how we get more stuff into
+the buffer when we're reading from filehandles. There's no guarentee that'll
+stay, or will always work that way, but, if you're debugging, that shouldn't
+matter.
+
 =cut
 
 sub debug {
@@ -371,8 +405,6 @@ sub _grab_control {
 
 	my $self = shift;
 	
-	# Some handler for \bin here, when I work it out
-	
 	if ( $self->{_BUFFER} =~ s/^\*// ) {
 	
 		return( '*','');
@@ -387,14 +419,16 @@ sub _grab_control {
 			$self->_grab_bin( $2 );
 			return( 'bin', $2 );
 			
-	# hex-dec character
+	# hex-dec character (escape)
 	} elsif ( $self->{_BUFFER} =~ s/^'([0-9a-f]{2})//i ) {
 	
+		$self->{_TEMP_ESCAPE_FLAG}++ if $self->{_NOTE_ESCAPES};
 		return( "'", $1 );
 	
-	# Control symbol
+	# Control symbol (escape)
 	} elsif ( $self->{_BUFFER} =~ s/^([-_~:|{}*'\\])// ) {
 	
+		$self->{_TEMP_ESCAPE_FLAG}++ if $self->{_NOTE_ESCAPES};
 		return( $1, '' );
 
 	# Escaped whitespace (ew, but allowed)
@@ -424,7 +458,7 @@ sub _grab_control {
 	my $die_string =  substr( $self->{_BUFFER}, 0, 50 );
 	$die_string =~ s/\r/[R]/g; 
 	carp "Your RTF is broken, trying to recover to nearest group from '\\$die_string'\n";
-	$self->{_BUFFER} =~ s/^.+?}/}/;
+	$self->{_BUFFER} =~ s/^.+?([}{])/$1/;
 	return ( '', '');
 
 }
@@ -451,7 +485,7 @@ sub _grab_bin {
 
 }
 
-=head1 BUGS
+=head1 NOTES
 
 To avoid intrusively deep parsing, if an alternative ASCII
 representation is available for a Unicode entity, and that
