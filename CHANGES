@@ -1,6 +1,11 @@
 Revision history for Perl extension RTF::Tokenizer.
 
-1.06		Mon Jan 05 18:00:00 2004	
+1.07	Fri Apr 02 21:45:00 2004	
+	- Added a note about unicode parsing
+	- Corrected dates in the documentation
+	- Fixed some warnings to do with line endings
+
+1.06	Mon Jan 05 18:00:00 2004	
 	- Fixed some brainos with tests, and skipping if IO::Scalar wasn't
 			installed.
 	- Corrected this file...

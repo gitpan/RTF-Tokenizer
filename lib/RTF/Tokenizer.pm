@@ -53,7 +53,7 @@ use strict;
 use Carp;
 use IO::File;
 
-$VERSION = '1.06';
+$VERSION = '1.07';
 
 =head1 METHODS
 
@@ -77,7 +77,7 @@ sub new {
 	# Get the real class name
 	my $proto = shift;
 	my $class = ref( $proto ) || $proto;
-	
+		
 	my $self = {};
 	
 	$self->{_BUFFER} = '';
@@ -178,9 +178,13 @@ sub _get_line {
 
 	my $self = shift();
 
-	# Do some localized cleverness
-	local($^W); # Turn warnings off for this
-	local $/ = $self->{_IRS};
+	# Turn off warnings for the rest of this sub
+	local($^W);
+
+	# Localize the input record separator before changing it so
+	# we don't mess up any other part of the application running
+	# us that relies on it
+	local $/ = $self->{_IRS}; 
 
 	# Read the line itself
 	$self->{_BUFFER} .= $self->{_FILEHANDLE}->getline();
@@ -202,9 +206,17 @@ sub _line_endings {
 		
 	}
 	
-	$self->{_RS} = "Macintosh" if $self->{_IRS} eq "\cM";
-	$self->{_RS} = "Windows" if $self->{_IRS} eq "\cM\cJ";
-	$self->{_RS} = "UNIX" if $self->{_IRS} eq "\cJ";
+	# Warnings will happen here if there wasn't a line ending,
+	# so switch them off for this part...
+	{
+	
+		local( $^W );
+	
+		$self->{_RS} = "Macintosh" if $self->{_IRS} eq "\cM";
+		$self->{_RS} = "Windows" if $self->{_IRS} eq "\cM\cJ";
+		$self->{_RS} = "UNIX" if $self->{_IRS} eq "\cJ";
+	
+	}
 	
 	# Add back to main buffer
 	$self->{_BUFFER} .= $temp_buffer;
@@ -479,6 +491,9 @@ sub _grab_control {
 		return( ';', '' );
 	
 	# Unicode characters
+	#  NOTE: IF YOU'RE THINKING "THIS CODE NEVER GETS REACHED?!", PLEASE POINT
+	#  YOUR FRIENDLY NEIGHBOURHOOD BROWSER AT
+	#  http://rt.cpan.org/Ticket/Display.html?id=5473
 	} elsif ( $self->{_BUFFER} =~ s/^u(\d+)// ) {
 	
 		return( 'u', $1 );
@@ -530,7 +545,7 @@ Pete Sergeant -- C<rtfr@clueball.com>
 
 =head1 COPYRIGHT
 
-Copyright 2003 B<Pete Sergeant>.
+Copyright 2004 B<Pete Sergeant>.
 
 This program is free software; you can redistribute it and/or modify it under
 the same terms as Perl itself.
