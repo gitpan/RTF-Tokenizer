@@ -1,4 +1,4 @@
-# RTF::Tokenizer 0.02.1
+# RTF::Tokenizer 0.03
 
 # by Peter Sergeant <pete@clueball.com>
 
@@ -8,7 +8,7 @@ require 5;
 package RTF::Tokenizer;
 use vars qw($VERSION);
 use strict;
-our $VERSION = '0.02.1';
+our $VERSION = '0.03';
 
 # Sample:
 #
@@ -127,7 +127,6 @@ sub process {
 	# So we started with a \ did we?
 	} elsif ($self->{_STATE} eq "beginControl") {
 
-
 		# Are we just escaping characters?
 		if ($character =~ m!(['\\}{])!) {
 			my $type = $1;
@@ -142,6 +141,12 @@ sub process {
 				$self->{_STATE} = 'text';
 				$self->{_CACHE} = $type;
 			}
+
+		# I'm a crack-filled unprintable
+		} elsif ($character =~ m/(\*|\||~|\-|_)/) {
+			$self->{_ARGUMENT} = $1;
+			$self->{_TOKEN} = 'control';
+			$self->{_STATE} = 'done';
 
 		# So here we are, reading the first char of a control sequence
 		} else {
@@ -183,8 +188,8 @@ sub process {
 			if ($character2 eq "'") {
 				$self->{_CACHE} .= $self->get_entity;
 
-			# Are we plain text?
-			} elsif ($character2 =~ m![a-zA-Z]!) {
+			# Are we plain text or an unprintable (*|~_-)?
+			} elsif ($character2 =~ m![a-zA-Z\*\|~\-_]!) {
 				# Return the char to the buffer
 				$self->{_BUFFER} .= "$character2\\";
 				$self->{_ARGUMENT} = $self->{_CACHE};
@@ -207,8 +212,8 @@ sub process {
 
 		# I'm a letter
 		if ($character =~ m![a-z]!i) {
-			$self->{_CACHE} .= $character;
-
+			$self->{_CACHE} .= $character;			
+			
 		# I'm a number or a sign
 		} elsif ($character =~ m![\d-]!) {
 			$self->{_CACHE} .= "|$character";
@@ -388,3 +393,5 @@ This program is free software; you can redistribute it and/or modify it under
 the same terms as Perl itself.
 
 =cut
+
+ 

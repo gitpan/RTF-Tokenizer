@@ -7,3 +7,6 @@ README
 Makefile.PL
 Changes
 samples/rtf2css.pl
+samples/test.rtf
+samples/dump_tokens.pl
+samples/dump_tokens.out

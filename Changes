@@ -1,5 +1,8 @@
 Revision history for Perl extension RTF::Tokenizer.
 
+0.03   Thu Oct 17 21:25:00 2002
+	- Now we handle unprintables (like non-breaking spaces)
+
 0.02.1 Mon Oct  7 10:02:00 2002
 	- Corrected a mistake in the README
 	- Fixed versions to be correct

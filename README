@@ -1,5 +1,5 @@
-RTF/Tokenizer version 0.02.1
-============================
+RTF/Tokenizer version 0.03
+==========================
 
 RTF/Tokenizer takes an RTF string, and spits out tokens, for your parsing
 and transformation pleasure.

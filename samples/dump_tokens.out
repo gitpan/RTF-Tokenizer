@@ -1,0 +1,783 @@
+group, 1, 
+control, rtf, 1
+control, ansi, 
+control, ansicpg, 1252
+control, uc, 1
+control, deff, 0
+control, deflang, 1033
+control, deflangfe, 1033
+group, 1, 
+control, fonttbl, 
+group, 1, 
+control, f, 0
+control, froman, 
+control, fcharset, 0
+control, fprq, 2
+group, 1, 
+control, *, 
+control, panose, 
+text, 02020603050405020304, 
+group, 0, 
+text, Times New Roman;, 
+group, 0, 
+group, 1, 
+control, f, 1
+control, fswiss, 
+control, fcharset, 0
+control, fprq, 2
+group, 1, 
+control, *, 
+control, panose, 
+text, 020b0604020202020204, 
+group, 0, 
+text, Arial;, 
+group, 0, 
+group, 1, 
+control, f, 3
+control, froman, 
+control, fcharset, 2
+control, fprq, 2
+group, 1, 
+control, *, 
+control, panose, 
+text, 05050102010706020507, 
+group, 0, 
+text, Symbol;, 
+group, 0, 
+group, 1, 
+control, f, 36
+control, froman, 
+control, fcharset, 238
+control, fprq, 2
+text, Times New Roman CE;, 
+group, 0, 
+group, 1, 
+control, f, 37
+control, froman, 
+control, fcharset, 204
+control, fprq, 2
+text, Times New Roman Cyr;, 
+group, 0, 
+group, 1, 
+control, f, 39
+control, froman, 
+control, fcharset, 161
+control, fprq, 2
+text, Times New Roman Greek;, 
+group, 0, 
+group, 1, 
+control, f, 40
+control, froman, 
+control, fcharset, 162
+control, fprq, 2
+text, Times New Roman Tur;, 
+group, 0, 
+group, 1, 
+control, f, 41
+control, froman, 
+control, fcharset, 186
+control, fprq, 2
+text, Times New Roman Baltic;, 
+group, 0, 
+group, 1, 
+control, f, 42
+control, fswiss, 
+control, fcharset, 238
+control, fprq, 2
+text, Arial CE;, 
+group, 0, 
+group, 1, 
+control, f, 43
+control, fswiss, 
+control, fcharset, 204
+control, fprq, 2
+text, Arial Cyr;, 
+group, 0, 
+group, 1, 
+control, f, 45
+control, fswiss, 
+control, fcharset, 161
+control, fprq, 2
+text, Arial Greek;, 
+group, 0, 
+group, 1, 
+control, f, 46
+control, fswiss, 
+control, fcharset, 162
+control, fprq, 2
+text, Arial Tur;, 
+group, 0, 
+group, 1, 
+control, f, 47
+control, fswiss, 
+control, fcharset, 186
+control, fprq, 2
+text, Arial Baltic;, 
+group, 0, 
+group, 0, 
+group, 1, 
+control, colortbl, 
+text, ;, 
+control, red, 0
+control, green, 0
+control, blue, 0
+text, ;, 
+control, red, 0
+control, green, 0
+control, blue, 255
+text, ;, 
+control, red, 0
+control, green, 255
+control, blue, 255
+text, ;, 
+control, red, 0
+control, green, 255
+control, blue, 0
+text, ;, 
+control, red, 255
+control, green, 0
+control, blue, 255
+text, ;, 
+control, red, 255
+control, green, 0
+control, blue, 0
+text, ;, 
+control, red, 255
+control, green, 255
+control, blue, 0
+text, ;, 
+control, red, 255
+control, green, 255
+control, blue, 255
+text, ;, 
+control, red, 0
+control, green, 0
+control, blue, 128
+text, ;, 
+control, red, 0
+control, green, 128
+control, blue, 128
+text, ;, 
+control, red, 0
+control, green, 128
+control, blue, 0
+text, ;, 
+control, red, 128
+control, green, 0
+control, blue, 128
+text, ;, 
+control, red, 128
+control, green, 0
+control, blue, 0
+text, ;, 
+control, red, 128
+control, green, 128
+control, blue, 0
+text, ;, 
+control, red, 128
+control, green, 128
+control, blue, 128
+text, ;, 
+control, red, 192
+control, green, 192
+control, blue, 192
+text, ;, 
+group, 0, 
+group, 1, 
+control, stylesheet, 
+group, 1, 
+control, widctlpar, 
+control, adjustright, 
+control, fs, 20
+control, lang, 2057
+control, cgrid, 
+control, snext, 0
+text, Normal;, 
+group, 0, 
+group, 1, 
+control, s, 1
+control, keepn, 
+control, widctlpar, 
+control, outlinelevel, 0
+control, adjustright, 
+control, b, 
+control, fs, 20
+control, lang, 2057
+control, cgrid, 
+control, sbasedon, 0
+control, snext, 0
+text, heading 1;, 
+group, 0, 
+group, 1, 
+control, s, 2
+control, keepn, 
+control, widctlpar, 
+control, outlinelevel, 1
+control, adjustright, 
+control, i, 
+control, fs, 20
+control, lang, 2057
+control, cgrid, 
+control, sbasedon, 0
+control, snext, 0
+text, heading 2;, 
+group, 0, 
+group, 1, 
+control, *, 
+control, cs, 10
+control, additive, 
+text, Default Paragraph Font;, 
+group, 0, 
+group, 1, 
+control, s, 15
+control, widctlpar, 
+control, adjustright, 
+control, fs, 20
+control, lang, 2057
+control, cgrid, 
+control, sbasedon, 0
+control, snext, 15
+text, footnote text;, 
+group, 0, 
+group, 1, 
+control, *, 
+control, cs, 16
+control, additive, 
+control, super, 
+control, sbasedon, 10
+text, footnote reference;, 
+group, 0, 
+group, 0, 
+group, 1, 
+control, *, 
+control, listtable, 
+group, 1, 
+control, list, 
+control, listtemplateid, 134807553
+control, listsimple, 
+group, 1, 
+control, listlevel, 
+control, levelnfc, 23
+control, leveljc, 0
+control, levelfollow, 0
+control, levelstartat, 1
+control, levelspace, 0
+control, levelindent, 0
+group, 1, 
+control, leveltext, 
+text, , 
+control, u, -3913
+text, ?;, 
+group, 0, 
+group, 1, 
+control, levelnumbers, 
+text, ;, 
+group, 0, 
+control, f, 3
+control, fbias, 0
+control, fi, -360
+control, li, 360
+control, jclisttab, 
+control, tx, 360
+group, 0, 
+group, 1, 
+control, listname, 
+text, ;, 
+group, 0, 
+control, listid, 466748370
+group, 0, 
+group, 0, 
+group, 1, 
+control, *, 
+control, listoverridetable, 
+group, 1, 
+control, listoverride, 
+control, listid, 466748370
+control, listoverridecount, 0
+control, ls, 1
+group, 0, 
+group, 0, 
+group, 1, 
+control, info, 
+group, 1, 
+control, title, 
+text, RTF::Tokenizer Test Document, 
+group, 0, 
+group, 1, 
+control, author, 
+text, PeteSergeant, 
+group, 0, 
+group, 1, 
+control, operator, 
+text, PeteSergeant, 
+group, 0, 
+group, 1, 
+control, creatim, 
+control, yr, 2002
+control, mo, 10
+control, dy, 17
+control, hr, 15
+control, min, 2
+group, 0, 
+group, 1, 
+control, revtim, 
+control, yr, 2002
+control, mo, 10
+control, dy, 17
+control, hr, 15
+control, min, 10
+group, 0, 
+group, 1, 
+control, version, 1
+group, 0, 
+group, 1, 
+control, edmins, 6
+group, 0, 
+group, 1, 
+control, nofpages, 2
+group, 0, 
+group, 1, 
+control, nofwords, 41
+group, 0, 
+group, 1, 
+control, nofchars, 234
+group, 0, 
+group, 1, 
+control, *, 
+control, company, 
+text, Sophos Plc, 
+group, 0, 
+group, 1, 
+control, nofcharsws, 287
+group, 0, 
+group, 1, 
+control, vern, 113
+group, 0, 
+group, 0, 
+control, paperw, 11906
+control, paperh, 16838
+control, widowctrl, 
+control, ftnbj, 
+control, aenddoc, 
+control, formshade, 
+control, viewkind, 4
+control, viewscale, 100
+control, pgbrdrhead, 
+control, pgbrdrfoot, 
+control, fet, 0
+control, sectd, 
+control, linex, 0
+control, headery, 709
+control, footery, 709
+control, colsx, 709
+control, endnhere, 
+control, sectdefaultcl, 
+group, 1, 
+control, *, 
+control, pnseclvl, 1
+control, pnucrm, 
+control, pnstart, 1
+control, pnindent, 720
+control, pnhang, 
+group, 1, 
+control, pntxta, 
+text, ., 
+group, 0, 
+group, 0, 
+group, 1, 
+control, *, 
+control, pnseclvl, 2
+control, pnucltr, 
+control, pnstart, 1
+control, pnindent, 720
+control, pnhang, 
+group, 1, 
+control, pntxta, 
+text, ., 
+group, 0, 
+group, 0, 
+group, 1, 
+control, *, 
+control, pnseclvl, 3
+control, pndec, 
+control, pnstart, 1
+control, pnindent, 720
+control, pnhang, 
+group, 1, 
+control, pntxta, 
+text, ., 
+group, 0, 
+group, 0, 
+group, 1, 
+control, *, 
+control, pnseclvl, 4
+control, pnlcltr, 
+control, pnstart, 1
+control, pnindent, 720
+control, pnhang, 
+group, 1, 
+control, pntxta, 
+text, ), 
+group, 0, 
+group, 0, 
+group, 1, 
+control, *, 
+control, pnseclvl, 5
+control, pndec, 
+control, pnstart, 1
+control, pnindent, 720
+control, pnhang, 
+group, 1, 
+control, pntxtb, 
+text, (, 
+group, 0, 
+group, 1, 
+control, pntxta, 
+text, ), 
+group, 0, 
+group, 0, 
+group, 1, 
+control, *, 
+control, pnseclvl, 6
+control, pnlcltr, 
+control, pnstart, 1
+control, pnindent, 720
+control, pnhang, 
+group, 1, 
+control, pntxtb, 
+text, (, 
+group, 0, 
+group, 1, 
+control, pntxta, 
+text, ), 
+group, 0, 
+group, 0, 
+group, 1, 
+control, *, 
+control, pnseclvl, 7
+control, pnlcrm, 
+control, pnstart, 1
+control, pnindent, 720
+control, pnhang, 
+group, 1, 
+control, pntxtb, 
+text, (, 
+group, 0, 
+group, 1, 
+control, pntxta, 
+text, ), 
+group, 0, 
+group, 0, 
+group, 1, 
+control, *, 
+control, pnseclvl, 8
+control, pnlcltr, 
+control, pnstart, 1
+control, pnindent, 720
+control, pnhang, 
+group, 1, 
+control, pntxtb, 
+text, (, 
+group, 0, 
+group, 1, 
+control, pntxta, 
+text, ), 
+group, 0, 
+group, 0, 
+group, 1, 
+control, *, 
+control, pnseclvl, 9
+control, pnlcrm, 
+control, pnstart, 1
+control, pnindent, 720
+control, pnhang, 
+group, 1, 
+control, pntxtb, 
+text, (, 
+group, 0, 
+group, 1, 
+control, pntxta, 
+text, ), 
+group, 0, 
+group, 0, 
+control, pard, 
+control, plain, 
+control, s, 1
+control, keepn, 
+control, widctlpar, 
+control, outlinelevel, 0
+control, adjustright, 
+control, b, 
+control, fs, 20
+control, lang, 2057
+control, cgrid, 
+group, 1, 
+control, f, 1
+control, fs, 22
+text, RTF::Tokenizer Test Document, 
+group, 0, 
+group, 1, 
+control, b, 0
+control, f, 1
+control, fs, 22
+control, par, 
+group, 0, 
+control, pard, 
+control, plain, 
+control, widctlpar, 
+control, adjustright, 
+control, fs, 20
+control, lang, 2057
+control, cgrid, 
+group, 1, 
+control, par, 
+group, 0, 
+control, pard, 
+control, plain, 
+control, s, 2
+control, keepn, 
+control, widctlpar, 
+control, outlinelevel, 1
+control, adjustright, 
+control, i, 
+control, fs, 20
+control, lang, 2057
+control, cgrid, 
+text, Created using Word 97, 
+control, par, 
+control, pard, 
+control, plain, 
+control, widctlpar, 
+control, adjustright, 
+control, fs, 20
+control, lang, 2057
+control, cgrid, 
+group, 1, 
+control, par, 
+group, 1, 
+control, pntext, 
+control, pard, 
+control, plain, 
+control, f, 3
+control, fs, 20
+control, cgrid, 
+control, loch, 
+control, af, 3
+control, dbch, 
+control, af, 0
+control, hich, 
+control, f, 3
+text, ·, 
+control, tab, 
+group, 0, 
+group, 0, 
+control, pard, 
+control, fi, -360
+control, li, 360
+control, widctlpar, 
+control, jclisttab, 
+control, tx, 360
+group, 1, 
+control, *, 
+control, pn, 
+control, pnlvlblt, 
+control, ilvl, 0
+control, ls, 1
+control, pnrnot, 0
+control, pnf, 3
+control, pnstart, 1
+control, pnindent, 360
+control, pnhang, 
+group, 1, 
+control, pntxtb, 
+text, ·, 
+group, 0, 
+group, 0, 
+control, ls, 1
+control, adjustright, 
+group, 1, 
+text, Example of optional hyphenation: anti, 
+control, -, 
+text, virus, 
+control, par, 
+group, 1, 
+control, pntext, 
+control, pard, 
+control, plain, 
+control, f, 3
+control, fs, 20
+control, cgrid, 
+control, loch, 
+control, af, 3
+control, dbch, 
+control, af, 0
+control, hich, 
+control, f, 3
+text, ·, 
+control, tab, 
+group, 0, 
+group, 0, 
+control, pard, 
+control, fi, -360
+control, li, 360
+control, widctlpar, 
+control, jclisttab, 
+control, tx, 360
+group, 1, 
+control, *, 
+control, pn, 
+control, pnlvlblt, 
+control, ilvl, 0
+control, ls, 1
+control, pnrnot, 0
+control, pnf, 3
+control, pnstart, 1
+control, pnindent, 360
+control, pnhang, 
+group, 1, 
+control, pntxtb, 
+text, ·, 
+group, 0, 
+group, 0, 
+control, ls, 1
+control, adjustright, 
+group, 1, 
+text, Example of a non-breaking hyphen: gurgely, 
+control, _, 
+text, urdely, 
+control, par, 
+group, 1, 
+control, pntext, 
+control, pard, 
+control, plain, 
+control, f, 3
+control, fs, 20
+control, cgrid, 
+control, loch, 
+control, af, 3
+control, dbch, 
+control, af, 0
+control, hich, 
+control, f, 3
+text, ·, 
+control, tab, 
+group, 0, 
+group, 0, 
+control, pard, 
+control, fi, -360
+control, li, 360
+control, widctlpar, 
+control, jclisttab, 
+control, tx, 360
+group, 1, 
+control, *, 
+control, pn, 
+control, pnlvlblt, 
+control, ilvl, 0
+control, ls, 1
+control, pnrnot, 0
+control, pnf, 3
+control, pnstart, 1
+control, pnindent, 360
+control, pnhang, 
+group, 1, 
+control, pntxtb, 
+text, ·, 
+group, 0, 
+group, 0, 
+control, ls, 1
+control, adjustright, 
+group, 1, 
+text, Example of a non-breaking space: Peter, 
+control, ~, 
+text, Sergeant, 
+control, par, 
+group, 1, 
+control, pntext, 
+control, pard, 
+control, plain, 
+control, f, 3
+control, fs, 20
+control, cgrid, 
+control, loch, 
+control, af, 3
+control, dbch, 
+control, af, 0
+control, hich, 
+control, f, 3
+text, ·, 
+control, tab, 
+group, 0, 
+group, 0, 
+control, pard, 
+control, fi, -360
+control, li, 360
+control, widctlpar, 
+control, jclisttab, 
+control, tx, 360
+group, 1, 
+control, *, 
+control, pn, 
+control, pnlvlblt, 
+control, ilvl, 0
+control, ls, 1
+control, pnrnot, 0
+control, pnf, 3
+control, pnstart, 1
+control, pnindent, 360
+control, pnhang, 
+group, 1, 
+control, pntxtb, 
+text, ·, 
+group, 0, 
+group, 0, 
+control, ls, 1
+control, adjustright, 
+group, 1, 
+text, Example of an entity: §, 
+control, par, 
+group, 0, 
+control, pard, 
+control, widctlpar, 
+control, adjustright, 
+group, 1, 
+control, par, 
+text, Some assorted whitespace:, 
+control, par, 
+control, tab, 
+text,  , 
+control, par, 
+control, par, 
+control, page, 
+text, And a footnote, 
+group, 0, 
+group, 1, 
+control, cs, 16
+control, super, 
+control, chftn, 
+group, 1, 
+control, footnote, 
+control, pard, 
+control, plain, 
+control, s, 15
+control, widctlpar, 
+control, adjustright, 
+control, fs, 20
+control, lang, 2057
+control, cgrid, 
+group, 1, 
+control, cs, 16
+control, super, 
+control, chftn, 
+group, 0, 
+group, 1, 
+text,  There we are, 
+group, 0, 
+group, 0, 
+group, 0, 
+group, 1, 
+text,  for good measure!, 
+control, par, 
+group, 0, 
+group, 0, 
+eof, , 
