@@ -17,6 +17,7 @@ Tokenizes RTF
  my $tokenizer = RTF::Tokenizer->new( string => '{\rtf1}'  );
  my $tokenizer = RTF::Tokenizer->new( file   => \*STDIN    );
  my $tokenizer = RTF::Tokenizer->new( file   => 'lala.rtf' );
+ my $tokenizer = RTF::Tokenizer->new( file   => 'lala.rtf', sloppy => 1 );
  
  my $tokenizer = RTF::Tokenizer->new( string => '{\rtf1}', note_escapes => 1 );
  
@@ -53,7 +54,7 @@ use strict;
 use Carp;
 use IO::File;
 
-$VERSION = '1.07';
+$VERSION = '1.08';
 
 =head1 METHODS
 
@@ -69,6 +70,14 @@ the synopsis makes this much more clear than does this description :-)
 As of version 1.04, we can also differentiate between control words
 and escapes. If you pass a C<note_escapes> parameter with a true value
 then escapes will have a token type of C<escape> rather than C<control>.
+
+Version 1.08 and above allow you to deal with a common RTF error that
+programs insist on spitting out without just panicking:
+
+ \control1Plaintext
+
+Which is nasty. Do this by passing the 'sloppy' attribute with a true
+value to C<new()>. You can also use the C<sloppy()> method.
 
 =cut
 
@@ -96,6 +105,8 @@ sub new {
 	elsif ( $config{'string'} ) { $self->read_string( $config{'string'} ) }
 	
 	$self->{_NOTE_ESCAPES} = $config{'note_escapes'};
+	
+	$self->{_SLOPPY} = 1 if $config{'sloppy'};
 	
 	# Return our newly blessed
 	return $self;
@@ -388,6 +399,26 @@ sub put_token {
 
 }
 
+=head2 sloppy( [bool] )
+
+Decides whether we allow some types of broken RTF. See C<new()>'s docs
+for a little more explanation about this. Pass it 1 to turn it on, 0 to
+turn it off. This will always return undef.
+
+=cut
+
+sub sloppy {
+
+	my $self = shift;
+	my $bool = shift;
+
+	if ( $bool ) { $self->{_SLOPPY} = 1 }
+	else { $self->{_SLOPPY} = 0 }
+
+	return undef;
+
+}
+
 =head2 initial_read( [number] )
 
 Don't call this unless you actually have a good reason. When
@@ -497,13 +528,22 @@ sub _grab_control {
 	} elsif ( $self->{_BUFFER} =~ s/^u(\d+)// ) {
 	
 		return( 'u', $1 );
+
+	# So we're going to be a little less anal, and allow incorrect control words,
+	# but we're going to complain
+	} elsif ( ($self->{_SLOPPY}) && ($self->{_BUFFER} =~ s/^([a-z]{1,32})(-?\d+)//i )) {
 		
+		my $param = '';
+		$param = $2 if defined($2);
+		
+		return( $1, $param ) 
 	}
 	
 	# Something is very messed up. Bail
 	my $die_string =  substr( $self->{_BUFFER}, 0, 50 );
 	$die_string =~ s/\r/[R]/g; 
 	carp "Your RTF is broken, trying to recover to nearest group from '\\$die_string'\n";
+	carp "Chances are you have some RTF like \\control1plaintext. Which is illegal. But you can allow that by passing the 'sloppy' attribute to new() or using the sloppy() method. Please also write to and abuse the developer of the software which wrote your RTF :-)\n";
 	$self->{_BUFFER} =~ s/^.+?([}{])/$1/;
 	return ( '', '');
 

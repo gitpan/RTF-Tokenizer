@@ -1,5 +1,8 @@
 Revision history for Perl extension RTF::Tokenizer.
 
+1.08  Tue Jan 04 14:40:00 2005
+	- Allow for 'sloppy' RTF to be handled if the user wants it
+
 1.07	Fri Apr 02 21:45:00 2004	
 	- Added a note about unicode parsing
 	- Corrected dates in the documentation

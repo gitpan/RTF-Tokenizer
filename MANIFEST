@@ -20,6 +20,7 @@ t/10binary_data.t
 t/11debug_method.t
 t/12escapes.t
 t/13put_token.t
+t/14sloppy.t
 t/901plain_text_outside_a_group.t
 t/902unicode_example.t
 t/903unicode_destination.t
@@ -37,4 +38,3 @@ t/914absolute_positioned_text.t
 t/915first_table_example.t
 t/916table_stylesheet.t
 t/917table.t
-META.yml                                Module meta-data (added by MakeMaker)
