@@ -1,5 +1,18 @@
 Revision history for Perl extension RTF::Tokenizer.
 
+1.00   Wed Mar 26 14:00:00 2003
+	- Complete internal rewrite
+	- Removal of RTF::Tokenizer::FontTable
+	- Removal of RTF::Tokenizer::ControlWords
+	- Removal of bookmark() function
+	- Removal of jump_to_control_word() function
+	- Control symbols and entities are now correctly handled
+		as control words, which removes the need for an
+		entity handler.
+
+0.04   Mon Mar 10 14:00:00 2003 (never released)
+	- Carry RTF::Tokenizer::ControlWords, a Control Word glossary
+
 0.03   Thu Oct 17 21:25:00 2002
 	- Now we handle unprintables (like non-breaking spaces)
 

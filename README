@@ -1,40 +1,78 @@
-RTF/Tokenizer version 0.03
-==========================
+      ______  _______  _______  __  __ 
+     |   __ \|_     _||    ___||__||__|         Tokenizes RTF
+     |      <  |   |  |    ___| __  __   
+     |___|__|  |___|  |___|    |__||__|         
+      _______         __                   __                     
+     |_     _|.-----.|  |--..-----..-----.|__|.-----..-----..----.
+       |   |  |  _  ||    < |  -__||     ||  ||-- __||  -__||   _|
+       |___|  |_____||__|__||_____||__|__||__||_____||_____||__| 
 
-RTF/Tokenizer takes an RTF string, and spits out tokens, for your parsing
-and transformation pleasure.
++---------------------------------------------------------------------+
+| RTF::Tokenizer - Version 1.0 - Peter Sergeant - <rtft@clueball.com> |
++---------------------------------------------------------------------+
 
-Essentially, this:
++-> Introduction
 
-  {\pard
-  \qc
-  \b\f3\fs40 Section 1: The Larch
-  \par}
++---------------------------------------------------------------------+
+|                                                                     |
+|     RTF::Tokenizer is an object-orientated low-level RTF reader. If |
+| you're looking to render RTF, or want a higher-level RTF processor, |
+| this is not the module for you - you want RTF::Reader.  This is the |
+| fifth release of RTF::Tokenizer - version 1.0 boasts a huge jump in |
+| performance and a complete rewrite - tokenizing a 1 MB file used to |
+| take 22 seconds  on my machine  -  it now takes 2 seconds.  Certain |
+| control words are now handled in a way which makes a lot more sense |
+| and a lot of cruft has been  removed ( bookmarks,  jump to control, |
+| entity-handling, font-table handling). This will probably break all |
+| your old scripts. Sorry, but it had to be done.                     |
+|                                                                     |
++---------------------------------------------------------------------+
 
-becomes:
++-> rtf2rtf
 
-  ['group', 1],
-  ['control', 'pard', ''],
-  ['control', 'qc', ''],
-  ['control', 'b', ''],
-  ['control', 'f', '3'],
-  ['control', 'fs', '40'],
-  ['text', 'Section 1: The Larch'],
-  ['control', 'par', ''],
-  ['group', 0]
++---------------------------------------------------------------------+
+|                                                                     |
+|     Here's a bit of code that demonstrates almost all functionality |
+| and will hopefully give you a quick  insight into how the module is |
+| used - full docs, are, of course, available in POD.                 |
+|                                                                     |
+| #!/usr/bin/perl                                                     |
+|                                                                     |
+| use strict;                                                         |
+| use RTF::Tokenizer;                                                 |
+|                                                                     |
+| my $tokenizer = RTF::Tokenizer->new();                              |
+| $tokenizer->read_file( $ARGV[0] );                                  |
+|                                                                     |
+| while (1) {                                                         |
+|                                                                     |
+|     my ( $type, $argument, $param ) = $tokenizer->get_token();      |
+|                                                                     |
+|     last if $type eq 'eof';                                         |
+|                                                                     |
+|     print $argument if $type eq 'text';                             |
+|     print "\\$argument$param\n" if $type eq 'control';              |
+|     print '}' if ($type eq 'group') and !$argument;                 |
+|     print '{' if ($type eq 'group') and $argument;                  |
+|                                                                     |
+| }                                                                   |
+|                                                                     |
++---------------------------------------------------------------------+
 
-There are no dependencies, and the thing is as easy to run as:
++-> Bugs/TODO
 
-  my $object = RTF::Tokenizer->new($rtf_string);
-  ...
-    my ($type, $value, $extra) = $object->get_token;
-  ...
++---------------------------------------------------------------------+
+|                                                                     |
+|     * Only very  basic tests  exist at the  moment.  More  would be |
+|       better,  but they're oh-so boring to write.                   |
+|                                                                     |
+|     * No support for \bin yet.  I *will* add this,  but I'm  yet to |
+|       find it in real-world use yet, and I'm still not sure about a |
+|       couple of  aspects of it.  If you have a real-world  example, |
+|       send it to me, and I'll updgrade the module.                  |
+|                                                                     |
++---------------------------------------------------------------------+
 
-COPYRIGHT AND LICENCE
-
-Copyright 2002 Peter Sergeant - pete@clueball.com.
-
-This program is free software; you can redistribute it and/or modify it under
-the same terms as Perl itself.
-
-
++---------------------------------------------------------------------+
+| RTF::Tokenizer - Version 1.0 - Peter Sergeant - <rtft@clueball.com> |
++---------------------------------------------------------------------+

@@ -1,7 +1,11 @@
 use ExtUtils::MakeMaker;
-# See lib/ExtUtils/MakeMaker.pm for details of how to influence
-# the contents of the Makefile that is written.
-WriteMakefile(
-    'NAME'	=> 'RTF::Tokenizer',
-    'VERSION_FROM' => 'lib/RTF/Tokenizer.pm', # finds $VERSION
+
+&WriteMakefile(
+               NAME          => 'RTF::Tokenizer',
+               DISTNAME      => 'RTF-Tokenizer',
+               VERSION_FROM  => 'lib/RTF/Tokenizer.pm', 
+	       PREREQ_PM     => { 
+		'Test::More' => '0.01',
+		'IO::Scalar' => '0.01',
+		 }               
 );

@@ -1,315 +1,4 @@
-# RTF::Tokenizer 0.03
-
-# by Peter Sergeant <pete@clueball.com>
-
-# Magic Package Stuff
-
-require 5;
-package RTF::Tokenizer;
-use vars qw($VERSION);
-use strict;
-our $VERSION = '0.03';
-
-# Sample:
-#
-# my $object = RTF::Tokenizer->new($line, sub {return chr(hex($_[0]))});
-# ...
-# my ($type, $value, $extra) = $object->get_token;
-# ...
-
-
-sub new {
-
-	my $self  = {};
-
-	$self->{_BUFFER} = reverse $_[1]; # Store our buffer (we can only go one way to start with)
-	$self->{_TOKEN} = '';
-	$self->{_ARGUMENT} = '';
-	$self->{_CACHE} = '';
-	$self->{_STATE} = '';
-
-	$self->{_BOOKMARKS} = {};
-
-	# Supply a default entity handler
-	$self->{_entity_conversion} = sub {return chr(hex($_[0]))};
-	# Override if needed
-	$self->{_entity_conversion} = $_[2] if $_[2];
-
-	bless($self);
-	return $self;
-}
-
-# Get a new character from the buffer
-sub _read_char {
-	my $self = shift;
-	return chop $self->{_BUFFER};
-}
-
-sub get_token {
-
-	my $self = shift;
-
-	$self->{_TOKEN} = '';
-	$self->{_ARGUMENT} = '';
-	$self->{_CACHE} = '';
-	$self->{_STATE} = '';
-
-	until ($self->{_STATE} eq "done") { $self->process }
-
-	if ($self->{_TOKEN} eq 'control') {
-		return 'control', split(/\|/, $self->{_ARGUMENT});
-	}
-
-	return $self->{_TOKEN}, $self->{_ARGUMENT};
-
-}
-
-# Allows us to search for control words and jump to them. This will
-# scroll through the buffer (be warned!)
-sub jump_to_control_word {
-
-	my $self = shift;
-
-	my @stop_words = @_;
-
-	while (1) {
-		my ($type, $value, $args) = ($self->get_token, '');
-
-		if ($type eq 'eof') { return 0; }
-
-		if ($type eq 'control') {
-			for (@stop_words) {
-				if ($_ eq $value) {
-					#print "*$value*$args*\n";
-					$self->{_BUFFER} .= reverse "\\$value$args";
-					return 1;
-				}
-			}
-		}
-	}
-}
-
-# Allows us to save the buffer at different states. The first arg
-# is either 'save' or 'retr', the second is the bookmark name.
-sub bookmark {
-
-	my $self = shift;
-
-	my $command = shift;
-	my $bookmark = shift;
-
-	if ($command eq 'save') {
-		$self->{_BOOKMARKS}->{$bookmark} = $self->{_BUFFER};
-	} elsif ($command eq 'retr') {
-		$self->{_BUFFER} = $self->{_BOOKMARKS}->{$bookmark};
-	} elsif ($command eq 'delete') {
-		$self->{_BOOKMARKS}->{$bookmark} = undef;
-	}
-
-}
-
-sub process {
-
-	my $self = shift;
-
-	my $character = $self->_read_char;
-
-	if ($character eq "") {
-
-		$self->{_STATE} = 'done';
-		$self->{_TOKEN} = 'eof';
-	}
-
-	# No state ... go get one!
-	if (!$self->{_STATE}) {
-		$self->set_state($character);
-
-	# So we started with a \ did we?
-	} elsif ($self->{_STATE} eq "beginControl") {
-
-		# Are we just escaping characters?
-		if ($character =~ m!(['\\}{])!) {
-			my $type = $1;
-
-			# Escaped char value?
-			if ($type eq "'") {
-				$self->{_STATE} = 'text';
-				$self->{_CACHE} = $self->get_entity;
-
-			# Nope, escaped metachar
-			} else {
-				$self->{_STATE} = 'text';
-				$self->{_CACHE} = $type;
-			}
-
-		# I'm a crack-filled unprintable
-		} elsif ($character =~ m/(\*|\||~|\-|_)/) {
-			$self->{_ARGUMENT} = $1;
-			$self->{_TOKEN} = 'control';
-			$self->{_STATE} = 'done';
-
-		# So here we are, reading the first char of a control sequence
-		} else {
-			$self->{_STATE} = 'controlSequence';
-			$self->{_CACHE} = $character;
-		}
-
-	# We're reading in plain text
-	} elsif ($self->{_STATE} eq "text") {
-
-
-		# Check for non-printed White Space
-		if ($character =~ m![\r\t\n]!) {
-
-		# Check for opening of closing a group
-		} elsif ($character =~ m!(}|{)!) {
-
-
-			my $type = $1;
-
-			# First we return it to the buffer
-			$self->{_BUFFER} .= $type;
-
-			# Then we return our plaintext so far...
-			$self->{_ARGUMENT} = $self->{_CACHE};
-			$self->{_TOKEN} = 'text';
-			$self->{_STATE} = 'done';
-
-		# Maybe we're a backslash...
-		} elsif ($character =~ m!\\!) {
-
-
-			# So we are. We need another character now to see
-			# what to do.
-
-			my $character2 = $self->_read_char;
-
-			# Are we an entity?
-			if ($character2 eq "'") {
-				$self->{_CACHE} .= $self->get_entity;
-
-			# Are we plain text or an unprintable (*|~_-)?
-			} elsif ($character2 =~ m![a-zA-Z\*\|~\-_]!) {
-				# Return the char to the buffer
-				$self->{_BUFFER} .= "$character2\\";
-				$self->{_ARGUMENT} = $self->{_CACHE};
-				$self->{_TOKEN} = 'text';
-				$self->{_STATE} = 'done';
-
-			# Guess we're an escaped char
-			} else {
-				$self->{_CACHE} .= $character2;
-			}
-
-		# So we're plain text
-		} else {
-
-			$self->{_CACHE} .= $character;
-		}
-
-	# Control Sequence names. Yay
-	} elsif ($self->{_STATE} eq "controlSequence" ) {
-
-		# I'm a letter
-		if ($character =~ m![a-z]!i) {
-			$self->{_CACHE} .= $character;			
-			
-		# I'm a number or a sign
-		} elsif ($character =~ m![\d-]!) {
-			$self->{_CACHE} .= "|$character";
-			$self->{_STATE} = 'controlSequenceArgument';
-
-		# I'm a terminating space
-		} elsif ($character =~ m!\s!) {
-			$self->{_STATE} = 'done';
-			$self->{_TOKEN} = 'control';
-			$self->{_ARGUMENT} = $self->{_CACHE};
-
-		# I'm something else. Return me to the buffer and return a token
-		} else {
-			$self->{_BUFFER} .= $character;
-			$self->{_STATE} = 'done';
-			$self->{_TOKEN} = 'control';
-			$self->{_ARGUMENT} = $self->{_CACHE};
-		}
-
-	# Control Character arguments
-	} elsif ($self->{_STATE} eq "controlSequenceArgument") {
-
-		# I'm a number
-		if ($character =~ m!\d!) {
-			$self->{_CACHE} .= $character;
-
-		# I'm a terminating space
-		} elsif ($character =~ m!\s!) {
-			$self->{_STATE} = 'done';
-			$self->{_TOKEN} = 'control';
-			$self->{_ARGUMENT} = $self->{_CACHE};
-
-		# I'm something else. Return me to the buffer and return a token
-		} else {
-			$self->{_BUFFER} .= $character;
-			$self->{_STATE} = 'done';
-			$self->{_TOKEN} = 'control';
-			$self->{_ARGUMENT} = $self->{_CACHE};
-		}
-
-	# We've hit the DONE state then
-	} elsif ($self->{_STATE} eq 'done') {
-		1;
-	# Panic
-	} else {
-		die "I don't know this state... *$self->{_STATE}*";
-	}
-
-}
-
-sub get_entity {
-
-	my $self = shift;
-
-	my $byte_value = $self->_read_char . $self->_read_char;
-
-	my $entity = $self->{_entity_conversion}->($byte_value);
-
-	return $entity;
-}
-
-sub set_state {
-
-	my $self = shift;
-	my $character = shift;
-
-	# Opening a group
-	if ($character eq "{") {
-		$self->{_TOKEN} = 'group';
-		$self->{_ARGUMENT} = 1;
-		$self->{_STATE} = 'done';
-
-	# Closing a group
-	} elsif ($character eq "}") {
-		$self->{_TOKEN} = 'group';
-		$self->{_ARGUMENT} = 0;
-		$self->{_STATE} = 'done';
-
-	# Starting a control token
-	} elsif ($character eq "\\") {
-		$self->{_STATE} = 'beginControl';
-
-	} elsif ($character =~ m![\r\n\t]!) {
-
-
-	# Text
-	} else {
-		$self->{_CACHE} = $character;
-		$self->{_STATE} = 'text';
-	}
-
-}
-
-1;
-
-__END__
+# RTF::Tokenizer - Peter Sergeant <rtft@clueball.com>
 
 =head1 NAME
 
@@ -321,77 +10,274 @@ Tokenizes RTF
 
 =head1 SYNOPSIS
 
-  use RTF::Tokenizer;
+ use RTF::Tokenizer;
+ 
+ # Create a tokenizer object
+ my $tokenizer = RTF::Tokenizer->new();
+ 
+ # Populate it from a file
+ $tokenizer->read_file('filename.txt');
+ 
+ # Or a file handle
+ $tokenizer->read_file( \*STDIN );
+ 
+ # Or a string
+ $tokenizer->read_string( '{\*\some rtf}' );
 
-  sub entity_handler {
-    return "&#" . hex($_[0]);
-  }
+ # Get the first token
+ my ( $token_type, $argument, $parameter ) =
+    $tokenizer->get_token();
 
-  my $object = RTF::Tokenizer->new($line);
-  #my $object = RTF::Tokenizer->new($line, \&entity_handler);
+=head1 INTRODUCTION
 
-  while (1) {
-    my ($type, $value, $extra) = $object->get_token;
-    print "$type, $value, $extra\n";
-    if ($type eq 'eof') { exit; }
-  }
+This documentation assumes some basic knowledge of RTF.
+If you lack that, go read The_RTF_Cookbook:
 
-  $rtf->bookmark('save', '_font_table_original');
+http://search.cpan.org/search?dist=RTF-Writer
 
-  $rtf->jump_to_control_word('fonttbl');
-  my ($la, $la, $la) = $rtf->get_token; # 'control', 'fonttbl'
+=cut
 
-  $rtf->bookmark('retr', '_font_table_original');
+require 5;
+package RTF::Tokenizer;
+use vars qw($VERSION);
 
-  $rtf->jump_to_control_word('rtf');
-  my ($la, $la, $la) = $rtf->get_token; # 'control', 'rtf', 1
+use strict;
+use Carp;
+use IO::File;
 
-  $rtf->bookmark('retr', '_font_table_original');
-
-  $rtf->bookmark('delete', '_font_table_original');
+$VERSION = '1.00';
 
 =head1 METHODS
 
-=head2 new ( $data [, entity handling subroutine ] )
+=head2 new()
 
-Creates an instance. Needs a string of RTF for the first argument
-and an optional subroutine for the second. This subroutine is what
-to do upon finding an entity. Default behaviour is to change it into
-the character represented, but you can make it spit out HTML entities
-if you want too (as per the example above). The argument passed to this
-routine will be a hex value for the entity.
+Returns a Tokenizer object. Currently accepts no arguments.
 
-=head2 get_token
+=cut
 
-Returns a list, containing: token type (one of: control, text, group
-or eof), token data, and then if it's a control word, the integer
-value associated with it (if there is one).
+sub new {
 
-=head2 bookmark ( action, name )
+	my $self = {};
+	
+	$self->{_BUFFER} = '';
+	$self->{_FILEHANDLE} = '';
+	
+	$self->{_UC} = 1;
+	
+	bless $self;
+	
+	return $self;
 
-Saves a copy of the current buffer to a hash in the object, with the key
-of 'name'. Possible actions are 'save', 'retr' and 'delete.' It's probably
-a good idea, if you have a large amount of text, to delete your bookmarks
-when done, because the hash contains a copy of the data, rather than a
-position in the buffer. Font.pm contains a good example.
+}
 
-=head2 jump_to_control_word ( list of control words )
+=head2 read_string( STRING )
 
-Goes through the buffer until it finds one of the control words. The next
-token from C<get_token>, having done this, will be the control word. The
-buffer up to this point will be lost (unless you've saved it.)
+Fills the Tokenizer's buffer with the string, ready
+to start tokenizing.
+
+=cut
+
+sub read_string {
+
+	my $self = shift;
+	$self->{_BUFFER} = shift;
+
+}
+
+=head2 read_file( \*FILEHANDLE )
+
+=head2 read_file( filename )
+
+Puts the first line from the filehandle into the buffer,
+and remembers the filehandle, so if you ask for a token,
+and the buffer is empty, it'll try and read the next line
+from the file.
+
+=cut
+
+sub read_file {
+
+	my $self = shift;
+	my $file = shift;
+	
+	if (ref $file) {
+	
+		$self->{_FILEHANDLE} = IO::File->new_from_fd( $file, '<' );
+		
+	} else {
+		
+		$self->{_FILEHANDLE} = new IO::File "< $file";
+		croak "Couldn't open $file for reading" unless $self->{_FILEHANDLE};
+		
+	}
+
+	# Check what our line-endings seem to be, then set $/ accordingly.
+	# (this code needs to be explicitly tested)
+	_line_endings( $self );
+
+	$self->{_BUFFER} .= $self->{_FILEHANDLE}->getline();
+
+}
+
+sub _line_endings {
+
+	my $self = shift();
+
+	$self->{_FILEHANDLE}->read( $self->{_BUFFER}, 500);
+	
+	# This should catch all cases
+	if ( $self->{_BUFFER} =~ m/(\cM\cJ|\cM|\cJ)/ ) {
+	
+		$/ = $1;
+		
+	}
+	
+	$self->{_RS} = "Macintosh" if $/ eq "\cM";
+	$self->{_RS} = "Windows" if $/ eq "\cM\cJ";
+	$self->{_RS} = "UNIX" if $/ eq "\cJ";
+}
+
+=head2 get_token()
+
+Returns the next token as a 3 item list: 'type', 'argument', 'parameter'.
+Token is one of: text, control, group, or eof.
+
+B<text>
+
+'type' is set to 'text'. 'argument' is set to the text itself. 'parameter'
+is left blank. NOTE: \{, \}, and \\ are all returned as control words,
+rather than rendered as text for you. As with \_, \- and friends.
+
+B<control>
+
+'type' is 'control'. 'argument' is the control word or control symbol.
+'parameter' is the control word's parameter if it has one - this will
+be numeric, EXCEPT when 'argument' is a literal ', in which case it 
+will be a two-letter hex string.
+
+B<group>
+
+'type' is 'group'. If it's the beginning of an RTF group, then
+'argument' is 1, else if it's the end, argument is 0. 'parameter'
+is not set.
+
+B<eof>
+
+End of file reached. 'type' is 'eof'. 'argument' is 1. 'parameter' is
+0.
+
+=cut
+
+sub get_token {
+
+	my $self = shift;
+
+	while (1) {
+	
+		#print substr($self->{_BUFFER}, 0, 50) . "\n";
+	
+		my $start_character = substr( $self->{_BUFFER}, 0, 1, '' );
+		
+		# Most likely to be text, so we check for that first
+		if ( $start_character =~ /[^\\}\r\n\t{]/ ) {
+			
+			local($^W); # Turn off warnings here
+			$self->{_BUFFER} =~ s/^([^\{\}\\\n\r]+)//;
+			return( 'text', $start_character . $1, '' );
+		
+		# Second most likely to be a control character
+		} elsif ( $start_character eq "\\" ) {
+			
+			return( 'control', $self->_grab_control() );
+		
+		# Probably a group then	
+		} elsif ( $start_character eq "{" ) {
+		
+			return( 'group', 1, '');
+		
+		} elsif ( $start_character eq "}" ) {
+		
+			return( 'group', 0, '');
+			
+		} elsif ( !$start_character ) {
+		
+			# We were read from a string, so return
+			return( 'eof', 1, 0 ) unless $self->{_FILEHANDLE};
+			
+			# See if there's anything left to read
+			local($^W); # Turn warnings off for this
+			$self->{_BUFFER} .= $self->{_FILEHANDLE}->getline();
+			return( 'eof', 1, 0 ) unless $self->{_BUFFER};
+		
+		}
+	
+	}
+
+}
+
+sub _grab_control {
+
+	my $self = shift;
+	
+	# Some handler for \bin here, when I work it out
+	
+	if ( $self->{_BUFFER} =~ s/^\*// ) {
+	
+		return( '*','');
+	
+	# An honest-to-god standard control word:
+	} elsif ( $self->{_BUFFER} =~ s/^([a-z]{1,32})((?:\d+|-\d+))?(?:[ ]|(?=[^a-z0-9]))//i ) {
+	
+			my $param = ''; $param = $2 if defined($2);
+			return( $1, $param ) unless $1 eq 'bin';
+			
+			# Binary data or uc
+			
+	# hex-dec character
+	} elsif ( $self->{_BUFFER} =~ s/^'([0-9abcdef][0-9abcdef])//i ) {
+	
+		return( "'", $1 );
+	
+	# Control symbol
+	} elsif ( $self->{_BUFFER} =~ s/^([-_~:|{}*\'\\\\])// ) {
+	
+		return( $1, '' );
+	
+	# Unicode characters
+	} elsif ( $self->{_BUFFER} =~ s/^u(\d+)// ) {
+	
+		return( 'u', $1 );
+	
+	}
+	
+	# Something is very fucked. Bail
+	my $die_string =  substr( $self->{_BUFFER}, 0, 100 );
+	$die_string =~ s/\r/[R]/g; 
+	die ("Something went very wrong:\n$die_string\n" );
+
+}
+
+=head1 BUGS
+
+To avoid intrusively deep parsing, if an alternative ASCII
+representation is available for a unicode entity, and that
+ASCII representation contains {, or \, by themselves, things
+will go b<funky>. But I'm not convinced either of those are
+allowed by the spec.
 
 =head1 AUTHOR
 
-Peter Sergeant E<lt>pete@clueball.comE<gt>
+Peter Sergeant E<lt>rtfr@clueball.comE<gt>
 
 =head1 COPYRIGHT
 
-Copyright 2002 Peter Sergeant.
+Copyright 2003 Peter Sergeant.
 
 This program is free software; you can redistribute it and/or modify it under
 the same terms as Perl itself.
 
 =cut
 
- 
+
+
+1;
