@@ -1,4 +1,4 @@
-RTF/Tokenizer version 0.01
+RTF/Tokenizer version 0.02
 ==========================
 
 RTF/Tokenizer takes an RTF string, and spits out tokens, for your parsing
@@ -35,3 +35,5 @@ Copyright 2002 Peter Sergeant - pete@clueball.com.
 
 This program is free software; you can redistribute it and/or modify it under
 the same terms as Perl itself.
+
+

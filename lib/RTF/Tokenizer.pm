@@ -8,7 +8,7 @@
 require 5;
 package RTF::Tokenizer;
 use strict;
-$VERSION = 0.01;
+my $VERSION = 0.02;
 
 # Sample:
 #
@@ -27,6 +27,8 @@ sub new {
 	$self->{_ARGUMENT} = '';
 	$self->{_CACHE} = '';
 	$self->{_STATE} = '';
+
+	$self->{_BOOKMARKS} = {};
 
 	# Supply a default entity handler
 	$self->{_entity_conversion} = sub {return chr(hex($_[0]))};
@@ -59,6 +61,50 @@ sub get_token {
 	}
 
 	return $self->{_TOKEN}, $self->{_ARGUMENT};
+
+}
+
+# Allows us to search for control words and jump to them. This will
+# scroll through the buffer (be warned!)
+sub jump_to_control_word {
+
+	my $self = shift;
+
+	my @stop_words = @_;
+
+	while (1) {
+		my ($type, $value, $args) = ($self->get_token, '');
+
+		if ($type eq 'eof') { return 0; }
+
+		if ($type eq 'control') {
+			for (@stop_words) {
+				if ($_ eq $value) {
+					#print "*$value*$args*\n";
+					$self->{_BUFFER} .= reverse "\\$value$args";
+					return 1;
+				}
+			}
+		}
+	}
+}
+
+# Allows us to save the buffer at different states. The first arg
+# is either 'save' or 'retr', the second is the bookmark name.
+sub bookmark {
+
+	my $self = shift;
+
+	my $command = shift;
+	my $bookmark = shift;
+
+	if ($command eq 'save') {
+		$self->{_BOOKMARKS}->{$bookmark} = $self->{_BUFFER};
+	} elsif ($command eq 'retr') {
+		$self->{_BUFFER} = $self->{_BOOKMARKS}->{$bookmark};
+	} elsif ($command eq 'delete') {
+		$self->{_BOOKMARKS}->{$bookmark} = undef;
+	}
 
 }
 
@@ -164,7 +210,7 @@ sub process {
 			$self->{_CACHE} .= $character;
 
 		# I'm a number or a sign
-		} elsif ($character =~ m![\d+-]!) {
+		} elsif ($character =~ m![\d-]!) {
 			$self->{_CACHE} .= "|$character";
 			$self->{_STATE} = 'controlSequenceArgument';
 
@@ -259,9 +305,14 @@ sub set_state {
 1;
 
 __END__
+
 =head1 NAME
 
 RTF::Tokenizer - Tokenize RTF
+
+=head1 DESCRIPTION
+
+Tokenizes RTF
 
 =head1 SYNOPSIS
 
@@ -280,9 +331,23 @@ RTF::Tokenizer - Tokenize RTF
     if ($type eq 'eof') { exit; }
   }
 
+  $rtf->bookmark('save', '_font_table_original');
+
+  $rtf->jump_to_control_word('fonttbl');
+  my ($la, $la, $la) = $rtf->get_token; # 'control', 'fonttbl'
+
+  $rtf->bookmark('retr', '_font_table_original');
+
+  $rtf->jump_to_control_word('rtf');
+  my ($la, $la, $la) = $rtf->get_token; # 'control', 'rtf', 1
+
+  $rtf->bookmark('retr', '_font_table_original');
+
+  $rtf->bookmark('delete', '_font_table_original');
+
 =head1 METHODS
 
-=head2 new
+=head2 new ( $data [, entity handling subroutine ] )
 
 Creates an instance. Needs a string of RTF for the first argument
 and an optional subroutine for the second. This subroutine is what
@@ -297,6 +362,20 @@ Returns a list, containing: token type (one of: control, text, group
 or eof), token data, and then if it's a control word, the integer
 value associated with it (if there is one).
 
+=head2 bookmark ( action, name )
+
+Saves a copy of the current buffer to a hash in the object, with the key
+of 'name'. Possible actions are 'save', 'retr' and 'delete.' It's probably
+a good idea, if you have a large amount of text, to delete your bookmarks
+when done, because the hash contains a copy of the data, rather than a
+position in the buffer. Font.pm contains a good example.
+
+=head2 jump_to_control_word ( list of control words )
+
+Goes through the buffer until it finds one of the control words. The next
+token from C<get_token>, having done this, will be the control word. The
+buffer up to this point will be lost (unless you've saved it.)
+
 =head1 AUTHOR
 
 Peter Sergeant E<lt>pete@clueball.comE<gt>
@@ -309,4 +388,3 @@ This program is free software; you can redistribute it and/or modify it under
 the same terms as Perl itself.
 
 =cut
-
