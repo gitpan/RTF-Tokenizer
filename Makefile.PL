@@ -5,7 +5,6 @@ use ExtUtils::MakeMaker;
                DISTNAME      => 'RTF-Tokenizer',
                VERSION_FROM  => 'lib/RTF/Tokenizer.pm', 
 	       PREREQ_PM     => { 
-		'Test::More' => '0.01',
-		'IO::Scalar' => '0.01',
-		 }               
+			'Test::More' => '0.01'
+		 	}               
 );

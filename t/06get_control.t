@@ -1,13 +1,15 @@
 use strict;
-use Test::More tests => 13;
+use Test::More tests => 15;
 use RTF::Tokenizer;
 
 my $tokenizer = RTF::Tokenizer->new();
 
-$tokenizer->read_string(q?{Ich nom es Peter\and-50\rtf1 a}\I0\rock\*5\'acMore text!?);
+$tokenizer->read_string(qq?{\\\rIch nom es Peter\\\n\\and-50\\rtf1 a}\\I0\\rock\\*5\\'acMore text!?);
 
 ok( eq_array( [$tokenizer->get_token()], ['group', 1, ''] ), 'Groups opens' );
+ok( eq_array( [$tokenizer->get_token()], ['control', 'par', ''] ), 'Read \\r properly');
 ok( eq_array( [$tokenizer->get_token()], ['text', 'Ich nom es Peter', ''] ), 'Read text' );
+ok( eq_array( [$tokenizer->get_token()], ['control', 'par', ''] ), 'Read \\n properly');
 ok( eq_array( [$tokenizer->get_token()], ['control', 'and', '-50'] ), 'Read control' );
 ok( eq_array( [$tokenizer->get_token()], ['control', 'rtf', 1]), 'Read control + param terminated by a-z');
 ok( eq_array( [$tokenizer->get_token()], ['text', 'a', ''] ), 'Read text' );

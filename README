@@ -8,7 +8,7 @@
        |___|  |_____||__|__||_____||__|__||__||_____||_____||__| 
 
 +---------------------------------------------------------------------+
-| RTF::Tokenizer - Version 1.0 - Peter Sergeant - <rtft@clueball.com> |
+| RTF::Tokenizer - Version 1.1 - Peter Sergeant - <rtft@clueball.com> |
 +---------------------------------------------------------------------+
 
 +-> Introduction
@@ -18,13 +18,15 @@
 |     RTF::Tokenizer is an object-orientated low-level RTF reader. If |
 | you're looking to render RTF, or want a higher-level RTF processor, |
 | this is not the module for you - you want RTF::Reader.  This is the |
-| fifth release of RTF::Tokenizer - version 1.0 boasts a huge jump in |
-| performance and a complete rewrite - tokenizing a 1 MB file used to |
-| take 22 seconds  on my machine  -  it now takes 2 seconds.  Certain |
-| control words are now handled in a way which makes a lot more sense |
-| and a lot of cruft has been  removed ( bookmarks,  jump to control, |
-| entity-handling, font-table handling). This will probably break all |
-| your old scripts. Sorry, but it had to be done.                     |
+| sixth release of  RTF::Tokenizer - it's faster, higher quality, and |
+| implements the RTF standard better than any previous release.       |
+|                                                                     |
+|     It's also philosophically  a better  module,  and conforms more |
+| strictly to Object Orientated  guidelines  - it can  be sub-classed |
+| and the interface is cleaner.                                       |
+|                                                                     |
+|     And remember, if you do find a bug, you can make money for TPF, |
+| so visit http://grou.ch/rtf.html to find out more :-)               |
 |                                                                     |
 +---------------------------------------------------------------------+
 
@@ -63,16 +65,11 @@
 
 +---------------------------------------------------------------------+
 |                                                                     |
-|     * Only very  basic tests  exist at the  moment.  More  would be |
-|       better,  but they're oh-so boring to write.                   |
-|                                                                     |
-|     * No support for \bin yet.  I *will* add this,  but I'm  yet to |
-|       find it in real-world use yet, and I'm still not sure about a |
-|       couple of  aspects of it.  If you have a real-world  example, |
-|       send it to me, and I'll updgrade the module.                  |
+|     * \uN support is potentially buggy, although that shouldn't end |
+|       up actually affecting anyone. See the docs for more details.  |
 |                                                                     |
 +---------------------------------------------------------------------+
 
 +---------------------------------------------------------------------+
-| RTF::Tokenizer - Version 1.0 - Peter Sergeant - <rtft@clueball.com> |
+| RTF::Tokenizer - Version 1.1 - Peter Sergeant - <rtft@clueball.com> |
 +---------------------------------------------------------------------+

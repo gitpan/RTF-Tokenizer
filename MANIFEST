@@ -11,6 +11,8 @@ t/05get_text.t
 t/06get_control.t
 t/07line_endings.t
 t/08control_delimiters.t
+t/09subclassing.t
+t/10binary_data.t
 t/901plain_text_outside_a_group.t
 t/902unicode_example.t
 t/903unicode_destination.t

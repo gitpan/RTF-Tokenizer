@@ -1,5 +1,22 @@
 Revision history for Perl extension RTF::Tokenizer.
 
+1.01   Sun Apr 10 22:00:00 2003
+	* We no longer trash $/, which is good
+	* The tokenizer can be sub-classed! Yay!
+	* \bin data now handled
+	* new() can now invoke read_file and read_string
+	* IO::File objects now accepted in read_file()
+	- Added some debugging to read_file() to catch weirdness
+	- Sanitized regular expressions
+	- Created the _get_line() subroutine
+	- Corrected documentation about read_file() behaviour
+	- Stopped the {_BUFFER} being overwritten on read
+	- Various bits of POD cleaned up
+	- Ability to control how many characters are read determining IRS
+	- Removed IO::Scalar dependency
+	- Added numerous new tests (mainly to tests above features)
+
+
 1.00   Wed Mar 26 14:00:00 2003
 	- Complete internal rewrite
 	- Removal of RTF::Tokenizer::FontTable
