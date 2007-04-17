@@ -54,7 +54,7 @@ use strict;
 use Carp;
 use IO::File;
 
-$VERSION = '1.08';
+$VERSION = '1.09';
 
 =head1 METHODS
 
@@ -157,7 +157,7 @@ sub read_file {
 		$self->{_FILEHANDLE} = IO::File->new_from_fd( $file, '<' );
 		croak "Couldn't create an IO::File object from the reference you specified" unless $self->{_FILEHANDLE};
 	
-	} elsif (ref $file eq 'IO::File') {
+	} elsif ( eval { $file->isa('IO::File') } ) {	
 	
 		$self->{_FILEHANDLE} = $file;
 		croak "Something unpossible happened (and your printer is probably on fire)" unless $self->{_FILEHANDLE};

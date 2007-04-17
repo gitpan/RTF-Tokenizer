@@ -1,5 +1,9 @@
 Revision history for Perl extension RTF::Tokenizer.
 
+1.09  Tue Apr 17 14:30:00 2007
+	- We can now use objects that are IO::File subclasses, thanks to
+			a patch from Richard Balint
+
 1.08  Tue Jan 04 14:40:00 2005
 	- Allow for 'sloppy' RTF to be handled if the user wants it
 

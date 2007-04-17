@@ -38,3 +38,4 @@ t/914absolute_positioned_text.t
 t/915first_table_example.t
 t/916table_stylesheet.t
 t/917table.t
+META.yml                                 Module meta-data (added by MakeMaker)
