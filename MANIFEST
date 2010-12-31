@@ -1,12 +1,15 @@
 CHANGES
+LICENSE
 MANIFEST
+META.yml
 Makefile.PL
 README
 TODO
-lib/RTF/Tokenizer.pm
-eg/rtfdump
+dist.ini
 eg/rtfdiff
+eg/rtfdump
 eg/test.rtf
+lib/RTF/Tokenizer.pm
 t/01new.t
 t/02read_file.t
 t/03read_string.t
@@ -38,4 +41,5 @@ t/914absolute_positioned_text.t
 t/915first_table_example.t
 t/916table_stylesheet.t
 t/917table.t
-META.yml                                 Module meta-data (added by MakeMaker)
+t/release-pod-coverage.t
+t/release-pod-syntax.t

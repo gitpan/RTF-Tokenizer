@@ -1,11 +1,13 @@
-      ______  _______  _______  __  __ 
-     |   __ \|_     _||    ___||__||__|         Tokenizes RTF
-     |      <  |   |  |    ___| __  __   
-     |___|__|  |___|  |___|    |__||__|         
-      _______         __                   __                     
-     |_     _|.-----.|  |--..-----..-----.|__|.-----..-----..----.
-       |   |  |  _  ||    < |  -__||     ||  ||-- __||  -__||   _|
-       |___|  |_____||__|__||_____||__|__||__||_____||_____||__| 
 
- See embeded POD documentation for details
+
+This archive contains the distribution RTF-Tokenizer,
+version 1.11:
+
+  Tokenize RTF
+
+This software is copyright (c) 2010 by Peter Sergeant.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
 

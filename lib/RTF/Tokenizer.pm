@@ -4,6 +4,10 @@
 
 RTF::Tokenizer - Tokenize RTF
 
+=head1 VERSION
+
+version 1.11
+
 =head1 DESCRIPTION
 
 Tokenizes RTF
