@@ -13,5 +13,5 @@ meta-spec:
   version: 1.4
 name: RTF-Tokenizer
 requires:
-  Test::More: 0.01
-version: 1.12
+  perl: v5.6.2
+version: 1.13

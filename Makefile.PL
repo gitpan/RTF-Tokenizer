@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-
+BEGIN { require v5.6.2; }
 
 use ExtUtils::MakeMaker 6.31;
 
@@ -19,10 +19,8 @@ my %WriteMakefileArgs = (
   'EXE_FILES' => [],
   'LICENSE' => 'perl',
   'NAME' => 'RTF::Tokenizer',
-  'PREREQ_PM' => {
-    'Test::More' => '0.01'
-  },
-  'VERSION' => '1.12',
+  'PREREQ_PM' => {},
+  'VERSION' => '1.13',
   'test' => {
     'TESTS' => 't/*.t'
   }
