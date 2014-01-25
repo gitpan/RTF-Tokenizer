@@ -7,7 +7,7 @@ RTF::Tokenizer - Tokenize RTF
 
 =head1 VERSION
 
-version 1.13
+version 1.14
 
 =head1 DESCRIPTION
 
@@ -54,9 +54,7 @@ L<http://search.cpan.org/search?dist=RTF-Writer>
 require 5;
 
 package RTF::Tokenizer;
-BEGIN {
-  $RTF::Tokenizer::VERSION = '1.13';
-}
+$RTF::Tokenizer::VERSION = '1.14';
 use vars qw($VERSION);
 
 use strict;
@@ -483,14 +481,10 @@ sub _grab_control {
 	# A standard control word:
 	} elsif (
 		$self->{_BUFFER} =~ s/
-
 			^([a-z]{1,32})          # Lowercase word
 			(-?\d+)?                # Optional signed number
-			(
-				?:\s                  # Either whitespace, which we gobble
-			|
-				(?=[^a-z0-9]))        # or a non alpha-numeric, which we leave
-
+			(?:\s|(?=[^a-z0-9]))    # Either whitespace, which we gobble or a
+			                        # non alpha-numeric, which we leave
 			//ix
 	) {
 		# Return the control word, unless it's a \bin
