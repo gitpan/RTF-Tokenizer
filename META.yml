@@ -4,14 +4,15 @@ author:
   - 'Peter Sergeant <pete@clueball.com>'
 build_requires: {}
 configure_requires:
-  ExtUtils::MakeMaker: 6.30
+  ExtUtils::MakeMaker: '6.30'
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 5.015, CPAN::Meta::Converter version 2.120921'
+generated_by: 'Dist::Zilla version 5.015, CPAN::Meta::Converter version 2.140640'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
-  version: 1.4
+  version: '1.4'
 name: RTF-Tokenizer
 requires:
+  ExtUtils::MakeMaker: '6.30'
   perl: v5.6.2
-version: 1.15
+version: '1.16'

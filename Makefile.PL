@@ -20,16 +20,20 @@ my %WriteMakefileArgs = (
   "EXE_FILES" => [],
   "LICENSE" => "perl",
   "NAME" => "RTF::Tokenizer",
-  "PREREQ_PM" => {},
+  "PREREQ_PM" => {
+    "ExtUtils::MakeMaker" => "6.30"
+  },
   "TEST_REQUIRES" => {},
-  "VERSION" => "1.15",
+  "VERSION" => "1.16",
   "test" => {
     "TESTS" => "t/*.t"
   }
 );
 
 
-my %FallbackPrereqs = ();
+my %FallbackPrereqs = (
+  "ExtUtils::MakeMaker" => "6.30"
+);
 
 
 unless ( eval { ExtUtils::MakeMaker->VERSION(6.63_03) } ) {

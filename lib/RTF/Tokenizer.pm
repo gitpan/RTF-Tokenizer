@@ -7,7 +7,7 @@ RTF::Tokenizer - Tokenize RTF
 
 =head1 VERSION
 
-version 1.15
+version 1.16
 
 =head1 DESCRIPTION
 
@@ -54,7 +54,7 @@ L<http://search.cpan.org/search?dist=RTF-Writer>
 require 5;
 
 package RTF::Tokenizer;
-$RTF::Tokenizer::VERSION = '1.15';
+$RTF::Tokenizer::VERSION = '1.16';
 use vars qw($VERSION);
 
 use strict;
@@ -219,7 +219,8 @@ sub _line_endings {
 	# Warnings will happen here if there wasn't a line ending,
 	# so switch them off for this part...
 	{
-		local ($^W);
+		# Reasonably sane default
+		$self->{_RS} = "UNIX" unless $self->{_IRS};
 
 		$self->{_RS} = "Macintosh" if $self->{_IRS} eq "\cM";
 		$self->{_RS} = "Windows"   if $self->{_IRS} eq "\cM\cJ";
@@ -308,7 +309,7 @@ sub get_token {
 
 		# Most likely to be text, so we check for that first
 		if ( $start_character =~ /[^\\{}\r\n]/ ) {
-			local ($^W);    # Turn off warnings here ('uninitialized')
+			no warnings 'uninitialized';
 
 			# We want to return text fields that have newlines in as one
 			# token, which requires a bit of work, as we read in one line
