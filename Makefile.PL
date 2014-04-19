@@ -21,10 +21,11 @@ my %WriteMakefileArgs = (
   "LICENSE" => "perl",
   "NAME" => "RTF::Tokenizer",
   "PREREQ_PM" => {
-    "ExtUtils::MakeMaker" => "6.30"
+    "ExtUtils::MakeMaker" => "6.30",
+    "IO::Scalar" => 0
   },
   "TEST_REQUIRES" => {},
-  "VERSION" => "1.16",
+  "VERSION" => "1.17",
   "test" => {
     "TESTS" => "t/*.t"
   }
@@ -32,7 +33,8 @@ my %WriteMakefileArgs = (
 
 
 my %FallbackPrereqs = (
-  "ExtUtils::MakeMaker" => "6.30"
+  "ExtUtils::MakeMaker" => "6.30",
+  "IO::Scalar" => 0
 );
 
 
