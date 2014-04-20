@@ -16,4 +16,4 @@ requires:
   ExtUtils::MakeMaker: '6.30'
   IO::Scalar: '0'
   perl: v5.6.2
-version: '1.17'
+version: '1.18'
